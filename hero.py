@@ -33,6 +33,7 @@ class hero:
         self.wound_count = 0
         self.state = "☑️"
         self.axx = False
+        self.nchurr = False
 
 
     @classmethod
@@ -183,10 +184,6 @@ class hero:
         for _ in range(nr_wounds):
             self.add_wound()
 
-        if self.lep <= 0:
-            if "☠️" not in self.name:
-                self.name = self.name + "☠️" 
-
         self.check_low_lep()
 
     def receive_healing(self, value: int):
@@ -235,6 +232,12 @@ class hero:
         Set the initiative value manually, so that players can roll themselves
         """
         self.ini = value
+    
+    def set_rs(self, value):
+        """
+        Set the rs value manually
+        """
+        self.rs = value
 
     def check_low_lep(self):
 
@@ -283,4 +286,22 @@ class hero:
             self.pa -= 2
             self.aw -= 4
             self.tp[1] -= 2
-        
+
+    def toggle_nchurr(self):
+
+        if not self.nchurr:
+            self.nchurr = True
+            self.mu += 10
+            self.ini += 4
+            self.at += 2
+            self.pa -= 2
+            self.rs += 3
+            self.mr += 10
+        elif self.nchurr:
+            self.nchurr = False
+            self.mu -= 10
+            self.ini -= 4
+            self.at -= 2
+            self.pa += 2
+            self.rs -= 3
+            self.mr -= 10

@@ -8,11 +8,12 @@ with st.sidebar:
     frinja = st.button("Frinja", on_click=bt_funcs.change_hero, kwargs={"name": "Frinja"})
     nadoran = st.button("Nadoran", on_click=bt_funcs.change_hero, kwargs={"name": "Nadoran"})
     sdick = st.button("Sdick", on_click=bt_funcs.change_hero, kwargs={"name": "Sdick"})
+    rest = st.button("Reset", on_click=bt_funcs.reset_hero)
 
 
 if 'hero' not in st.session_state:
      st.title("Helden-Tool")
-     st.markdown("Ein Tool um Wunden, Niedrige LE und mehr für DSA4.1 zu verwalten")
+     st.markdown("Ein Tool um Wunden, Niedrige LE und mehr für DSA4.1 zu verwalten.")
      st.markdown("Einfach links eine:n Held:in auswählen.")
 else:
 
@@ -56,6 +57,7 @@ else:
         st.metric("**Wunden**", held.wound_count)
     with c4:
         st.metric("**TP**", held.print_tp())
+        st.metric("**MR**", held.mr)
 
 
 
@@ -81,6 +83,8 @@ else:
         with c2:
             if pabutton:
                 st.subheader(held.parry_roll())
+        rs = st.number_input(label="RS", value=None, label_visibility="hidden", min_value=0)
+        rs_button = st.button("Set RS", on_click=held.set_rs, kwargs={"value": rs})
 
     with col32:
         # dodge roll button
@@ -91,5 +95,7 @@ else:
             if awbutton:
                 st.subheader(held.dodge_roll())
 
+    axx = st.toggle("**Axxeleratus**", on_change=held.toggle_axxeleratus, value=held.axx)
 
-    axx = st.toggle("**Axxeleratus**", on_change=held.toggle_axxeleratus)
+    # if held.name == "Sdick":
+    #     nchurr = st.toggle("***Ruf des N'Churr***", on_change=held.toggle_nchurr, value=held.nchurr)
