@@ -56,8 +56,8 @@ else:
         st.metric("**GS**", held.gs)
         st.metric("**Wunden**", held.wound_count)
     with c4:
-        st.metric("**TP**", held.print_tp())
         st.metric("**MR**", held.mr)
+        st.metric("**TP**", held.print_tp())
 
 
 

@@ -202,6 +202,8 @@ class hero:
         """
         Add a wound, automatically reduce appropriate values
         """
+        if self.nchurr:
+            return
         self.wound_count += 1
         self.at -= 3
         self.pa -= 3
@@ -231,16 +233,21 @@ class hero:
         """
         Set the initiative value manually, so that players can roll themselves
         """
-        self.ini = value
+        if value is not None:
+            self.ini = value
     
     def set_rs(self, value):
         """
         Set the rs value manually
         """
-        self.rs = value
+        if value is not None:
+            self.rs = value
 
     def check_low_lep(self):
 
+        if self.nchurr:
+            return
+        
         if self.lep < math.floor(self.max_lep/4):
             self.at = self.max_at
             self.pa = self.max_pa
@@ -290,6 +297,10 @@ class hero:
     def toggle_nchurr(self):
 
         if not self.nchurr:
+            if self.state != "☑️":
+                self.at = self.max_at
+                self.pa = self.max_pa
+                self.aw = self.max_aw
             self.nchurr = True
             self.mu += 10
             self.ini += 4
@@ -297,6 +308,9 @@ class hero:
             self.pa -= 2
             self.rs += 3
             self.mr += 10
+            for _ in range(self.wound_count):
+                self.remove_wound()
+            
         elif self.nchurr:
             self.nchurr = False
             self.mu -= 10
