@@ -5,13 +5,15 @@ import json
 
 class hero:
     
-    def __init__(self, name, at, pa, ini_dice: int, ini_bonus: int, tp: tuple, lep, mu, kl, intu, ch, ff, ge, ko, kk, gs, mr, rs, eisern):
+    def __init__(self, name, at, pa, aw, ini_dice: int, ini_bonus: int, tp: list, lep, mu, kl, intu, ch, ff, ge, ko, kk, gs, mr, rs, eisern):
         self.name:str = name
         self.max_at = at
         self.max_pa = pa
+        self.max_aw = aw
         self.at: int = at
         self.pa: int = pa
-        self.tp: tuple = tp # tuple containing number of d6s on index 0, and base tp on index 1
+        self.aw: int = aw
+        self.tp: list = tp # tuple containing number of d6s on index 0, and base tp on index 1
         self.lep: int = lep
         self.max_lep: int = lep
         self.mu: int = mu
@@ -30,6 +32,8 @@ class hero:
         self.ini: int = self.ini_roll(ini_bonus, ini_dice)
         self.wound_count = 0
         self.state = "☑️"
+        self.axx = False
+
 
     @classmethod
     def from_json(cls, file: str):
@@ -38,12 +42,13 @@ class hero:
             json_data["Name"],
             json_data["AT"],
             json_data["PA"],
+            json_data["AW"],
             json_data["INI"]["W6"],
             json_data["INI"]["BONUS"],
-            (
+            [
                 json_data["TP"]["W6"],
                 json_data["TP"]["Basis"]
-            ),
+            ],
             json_data["LeP"],
             json_data["MU"],
             json_data["KL"],
@@ -64,6 +69,9 @@ class hero:
         @return: TP value
         """
         return xd6(self.tp[0]) + self.tp[1]
+    
+    def print_tp(self) -> str:
+        return f"{self.tp[0]}W+{self.tp[1]}"
 
     def ini_roll(self, ini_bonus, ini_dice):
         """
@@ -118,7 +126,32 @@ class hero:
                     success = roll.CRIT
             else:
                 success = roll.SUCCESS    
-            
+        else:
+            success = roll.FAIL
+
+        res_tuple = (res, success)
+        return roll_tuple_to_string(res_tuple)
+    
+    def dodge_roll(self):
+        """
+        Roll on the AW value, create a tuple from the results and format them
+        @return: string representation of the roll
+        """
+        res = d20()
+
+        if res == 20:
+            if d20() > self.aw:
+                success = roll.FAIL_CONF
+            else:
+                success = roll.FAIL
+        elif res <= self.aw:
+            if res == 1:
+                if d20() < self.aw:
+                    success = roll.CRIT_CONF
+                else:
+                    success = roll.CRIT
+            else:
+                success = roll.SUCCESS    
         else: 
             success = roll.FAIL
 
@@ -175,6 +208,8 @@ class hero:
         self.wound_count += 1
         self.at -= 3
         self.pa -= 3
+        self.aw -= 3
+        self.max_aw -= 3
         self.max_at -= 3
         self.max_pa -= 3
         self.ini -= 3
@@ -188,8 +223,10 @@ class hero:
             self.wound_count -= 1
             self.at += 3
             self.pa += 3
+            self.aw += 3
             self.max_at += 3
             self.max_pa += 3
+            self.max_aw += 3
             self.ini += 3
             self.ge += 3     
 
@@ -204,22 +241,46 @@ class hero:
         if self.lep < math.floor(self.max_lep/4):
             self.at = self.max_at
             self.pa = self.max_pa
+            self.aw = self.max_aw
             self.at -= 3
             self.pa -= 3
+            self.aw -= 3
             self.state = "‼️"
         elif self.lep < math.floor(self.max_lep/3):
             self.at = self.max_at
             self.pa = self.max_pa
+            self.aw = self.max_aw
             self.at -= 2
             self.pa -= 2
+            self.aw -= 2
             self.state = "❗"
         elif self.lep < math.floor(self.max_lep/2):
             self.at = self.max_at
             self.pa = self.max_pa
+            self.aw = self.max_aw
             self.at -= 1
             self.pa -= 1
+            self.aw -= 1
             self.state = "❕"
         else:
             self.at = self.max_at
             self.pa = self.max_pa
+            self.aw = self.max_aw
             self.state = "☑️"
+
+    def toggle_axxeleratus(self):
+        if not self.axx:
+            self.axx = True
+            self.ini += self.ini_base
+            self.gs = self.gs * 2
+            self.pa += 2
+            self.aw += 4
+            self.tp[1] += 2
+        elif self.axx:
+            self.axx = False
+            self.ini -= self.ini_base
+            self.gs = int(self.gs / 2)
+            self.pa -= 2
+            self.aw -= 4
+            self.tp[1] -= 2
+        
