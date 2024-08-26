@@ -74,6 +74,12 @@ else:
                 st.subheader(held.attack_roll())
         ini = st.number_input(label="Ini", value=None, label_visibility="hidden", min_value=0)
         ini_button = st.button("Set Ini", on_click=held.set_ini, kwargs={"value": ini})
+        
+        # Positive Toggles
+        axx = st.toggle("**Axxeleratus**", on_change=held.toggle_axxeleratus, value=held.axx)
+
+        if held.name == "Sdick":
+            nchurr = st.toggle("***Ruf des N'Churr***", on_change=held.toggle_nchurr, value=held.nchurr)
 
     with col22:
         # parry roll button
@@ -86,6 +92,10 @@ else:
         rs = st.number_input(label="RS", value=None, label_visibility="hidden", min_value=0)
         rs_button = st.button("Set RS", on_click=held.set_rs, kwargs={"value": rs})
 
+        # Negative Toggles
+        low_penalty = st.toggle("**Erschwernis + 3**", on_change=held.toggle_low_penalty, value=held.low_penalty)
+        high_penalty = st.toggle("**Erschwernis + 5**", on_change=held.toggle_high_penalty, value=held.high_penalty)
+
     with col32:
         # dodge roll button
         c1, c2 = st.columns([1, 3])
@@ -95,7 +105,12 @@ else:
             if awbutton:
                 st.subheader(held.dodge_roll())
 
-    axx = st.toggle("**Axxeleratus**", on_change=held.toggle_axxeleratus, value=held.axx)
+        # Wound adder/remover
+        st.markdown('#### Wunden')
+        co1, co2 = st.columns(2)
+        with co1:
+            add = st.button('**+**', on_click=held.add_wound)
+        with co2:
+            add = st.button('**-**', on_click=held.remove_wound)
 
-    # if held.name == "Sdick":
-    #     nchurr = st.toggle("***Ruf des N'Churr***", on_change=held.toggle_nchurr, value=held.nchurr)
+    

@@ -34,6 +34,8 @@ class hero:
         self.state = "☑️"
         self.axx = False
         self.nchurr = False
+        self.low_penalty = False
+        self.high_penalty = False
 
 
     @classmethod
@@ -319,3 +321,43 @@ class hero:
             self.pa += 2
             self.rs -= 3
             self.mr -= 10
+
+    def toggle_low_penalty(self):
+        if self.low_penalty:
+            self.at += 3
+            self.pa += 3
+            self.aw += 3
+            self.max_at += 3
+            self.max_pa += 3
+            self.max_aw += 3
+            self.low_penalty = False
+        else:
+            self.at -= 3
+            self.pa -= 3
+            self.aw -= 3
+            self.max_at -= 3
+            self.max_pa -= 3
+            self.max_aw -= 3
+            self.low_penalty = True
+
+    def toggle_high_penalty(self):
+        if self.high_penalty:
+            self.at += 5
+            self.pa += 5
+            self.aw += 5
+            self.max_at += 5
+            self.max_pa += 5
+            self.max_aw += 5
+            self.high_penalty = False
+        else:
+            self.at -= 5
+            self.pa -= 5
+            self.aw -= 5
+            self.max_at -= 5
+            self.max_pa -= 5
+            self.max_aw -= 5
+            self.high_penalty = True
+
+
+
+        
