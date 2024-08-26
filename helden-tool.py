@@ -78,8 +78,8 @@ else:
         # Positive Toggles
         axx = st.toggle("**Axxeleratus**", on_change=held.toggle_axxeleratus, value=held.axx)
 
-        if held.name == "Sdick":
-            nchurr = st.toggle("***Ruf des N'Churr***", on_change=held.toggle_nchurr, value=held.nchurr)
+        # if held.name == "Sdick":
+            # nchurr = st.toggle("***Ruf des N'Churr***", on_change=held.toggle_nchurr, value=held.nchurr)
 
     with col22:
         # parry roll button
