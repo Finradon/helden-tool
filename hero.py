@@ -4,7 +4,7 @@ import math
 import json
 
 class hero:
-    
+
     def __init__(self, name, at, pa, aw, ini_dice: int, ini_bonus: int, tp: list, lep, mu, kl, intu, ch, ff, ge, ko, kk, gs, mr, rs, eisern):
         self.name:str = name
         self.max_at = at
@@ -27,7 +27,7 @@ class hero:
         self.gs: int = gs
         self.mr: int = mr
         self.rs: int = rs
-        self.eisern: bool = eisern 
+        self.eisern: bool = eisern
         self.ini_base: int = round((mu+mu+intu+ge)/5)
         self.ini: int = self.ini_roll(ini_bonus, ini_dice)
         self.wound_count = 0
@@ -72,7 +72,7 @@ class hero:
         @return: TP value
         """
         return xd6(self.tp[0]) + self.tp[1]
-    
+
     def print_tp(self) -> str:
         return f"{self.tp[0]}W+{self.tp[1]}"
 
@@ -81,7 +81,7 @@ class hero:
         Roll for initiative
         """
         return xd6(ini_dice) + self.ini_base + ini_bonus
-    
+
     def attack_roll(self) -> str:
         """
         Roll on the attack value, create a tuple from the results and format them
@@ -101,14 +101,14 @@ class hero:
                 else:
                     success = roll.CRIT
             else:
-                success = roll.SUCCESS    
-            
-        else: 
+                success = roll.SUCCESS
+
+        else:
             success = roll.FAIL
 
         res_tuple = (res, success, self.tp_roll())
         return roll_tuple_to_string(res_tuple)
-    
+
     def parry_roll(self) -> str:
         """
         Roll on the parry value, create a tuple from the results and format them
@@ -128,13 +128,13 @@ class hero:
                 else:
                     success = roll.CRIT
             else:
-                success = roll.SUCCESS    
+                success = roll.SUCCESS
         else:
             success = roll.FAIL
 
         res_tuple = (res, success)
         return roll_tuple_to_string(res_tuple)
-    
+
     def dodge_roll(self):
         """
         Roll on the AW value, create a tuple from the results and format them
@@ -154,13 +154,13 @@ class hero:
                 else:
                     success = roll.CRIT
             else:
-                success = roll.SUCCESS    
-        else: 
+                success = roll.SUCCESS
+        else:
             success = roll.FAIL
 
         res_tuple = (res, success)
         return roll_tuple_to_string(res_tuple)
-    
+
     def receive_damage(self, value: int, tp: bool):
         """
         Receive damage, under consideration of armor. Also adds wounds, if applicable
@@ -181,7 +181,7 @@ class hero:
             eisern = 2
         else:
             eisern = 0
-        
+
         nr_wounds = math.floor((damage-1)/(self.ko + eisern))
         for _ in range(nr_wounds):
             self.add_wound()
@@ -215,7 +215,7 @@ class hero:
         self.max_pa -= 3
         self.ini -= 3
         self.ge -= 3
-    
+
     def remove_wound(self):
         """
         Remove a wound, if at least one exists
@@ -229,7 +229,7 @@ class hero:
             self.max_pa += 3
             self.max_aw += 3
             self.ini += 3
-            self.ge += 3     
+            self.ge += 3
 
     def set_ini(self, value):
         """
@@ -237,7 +237,7 @@ class hero:
         """
         if value is not None:
             self.ini = value
-    
+
     def set_rs(self, value):
         """
         Set the rs value manually
@@ -249,7 +249,7 @@ class hero:
 
         if self.nchurr:
             return
-        
+
         if self.lep < math.floor(self.max_lep/4):
             self.at = self.max_at
             self.pa = self.max_pa
@@ -312,7 +312,7 @@ class hero:
             self.mr += 10
             for _ in range(self.wound_count):
                 self.remove_wound()
-            
+
         elif self.nchurr:
             self.nchurr = False
             self.mu -= 10
@@ -357,7 +357,3 @@ class hero:
             self.max_pa -= 5
             self.max_aw -= 5
             self.high_penalty = True
-
-
-
-        

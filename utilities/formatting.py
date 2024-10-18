@@ -6,10 +6,11 @@ def roll_tuple_to_string(res_tuple: tuple) ->str:
     @param res_tuple: Tuple of 2 or 3 elements: d20 result, success (bool), and tp (optional)
     @return: String representation
     """
-    
+
     res = res_tuple[0]
     suc = res_tuple[1]
-
+    suc_str = ""
+    tp = ""
     if suc == roll.SUCCESS:
         suc_str = ":white_check_mark:"
         if len(res_tuple) == 3:
@@ -25,7 +26,7 @@ def roll_tuple_to_string(res_tuple: tuple) ->str:
     elif suc == roll.CRIT_CONF:
         suc_str = "🎯‼️"
         if len(res_tuple) == 3:
-            tp = f"TP: {res_tuple[2]*2}"        
+            tp = f"TP: {res_tuple[2]*2}"
         else:
             tp = ""
     elif suc == roll.FAIL:

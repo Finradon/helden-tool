@@ -74,7 +74,7 @@ else:
                 st.subheader(held.attack_roll())
         ini = st.number_input(label="Ini", value=None, label_visibility="hidden", min_value=0)
         ini_button = st.button("Set Ini", on_click=held.set_ini, kwargs={"value": ini})
-        
+
         # Positive Toggles
         axx = st.toggle("**Axxeleratus**", on_change=held.toggle_axxeleratus, value=held.axx)
 
@@ -112,5 +112,3 @@ else:
             add = st.button('**+**', on_click=held.add_wound)
         with co2:
             add = st.button('**-**', on_click=held.remove_wound)
-
-    
